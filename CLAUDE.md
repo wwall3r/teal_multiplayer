@@ -29,7 +29,7 @@ This is a Phoenix 1.7+ web application using:
 
 ### Core Stack
 - **Phoenix Framework**: Web framework with LiveView support
-- **Ecto**: Database wrapper and query generator with PostgreSQL
+- **Ecto**: Database wrapper and query generator with SQLite3
 - **Phoenix LiveView**: Real-time web applications without JavaScript
 - **Tailwind CSS**: Utility-first CSS framework
 - **esbuild**: JavaScript bundler
@@ -48,7 +48,7 @@ This is a Phoenix 1.7+ web application using:
 - **LiveDashboard**: Available at `/dev/dashboard` in development
 
 ### Database
-- Uses PostgreSQL via Ecto
+- Uses SQLite3 via Ecto
 - Migrations in `priv/repo/migrations/`
 - Seeds in `priv/repo/seeds.exs`
 
