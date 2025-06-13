@@ -2,7 +2,7 @@ import Config
 
 # Configure your database
 config :teal_multiplayer, TealMultiplayer.Repo,
-  database: "teal_multiplayer_dev.db",
+  database: "../priv/db/teal_multiplayer_#{config_env()}.db",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10

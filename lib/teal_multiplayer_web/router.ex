@@ -8,6 +8,7 @@ defmodule TealMultiplayerWeb.Router do
     plug :put_root_layout, html: {TealMultiplayerWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug TealMultiplayerWeb.Plugs.EnsureSessionId
   end
 
   pipeline :api do

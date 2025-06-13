@@ -11,7 +11,7 @@ defmodule TealMultiplayerWeb.PageController do
   def create_game(conn, _params) do
     case Games.create_game() do
       {:ok, game} ->
-        {conn, session_id} = ensure_session_id(conn)
+        session_id = get_session(conn, :session_id)
         
         case Games.join_game(game.game_id, "Player", session_id) do
           {:ok, _player} ->
@@ -30,7 +30,7 @@ defmodule TealMultiplayerWeb.PageController do
   end
 
   def join_game(conn, %{"game_id" => game_id}) do
-    {conn, session_id} = ensure_session_id(conn)
+    session_id = get_session(conn, :session_id)
     
     case Games.join_game(game_id, "Player", session_id) do
       {:ok, _player} ->
@@ -43,17 +43,6 @@ defmodule TealMultiplayerWeb.PageController do
         conn
         |> put_flash(:error, "Failed to join game")
         |> redirect(to: ~p"/")
-    end
-  end
-
-  defp ensure_session_id(conn) do
-    case get_session(conn, :session_id) do
-      nil ->
-        session_id = Base.encode16(:crypto.strong_rand_bytes(16), case: :lower)
-        updated_conn = put_session(conn, :session_id, session_id)
-        {updated_conn, session_id}
-      session_id ->
-        {conn, session_id}
     end
   end
 end
