@@ -15,13 +15,29 @@ defmodule TealMultiplayerWeb.WaitingRoomLive do
         
         current_player = Games.get_player_by_session(session_id, game.id)
         
+        # If player doesn't exist, automatically add them to the game
+        current_player = 
+          case current_player do
+            nil ->
+              # Generate a default name for the player
+              player_name = "Player #{length(game.players) + 1}"
+              case Games.join_game(game_id, player_name, session_id) do
+                {:ok, new_player} -> new_player
+                {:error, _} -> nil
+              end
+            existing_player -> existing_player
+          end
+        
+        # Get updated game data to reflect any new player
+        updated_game = Games.get_game_with_players(game_id)
+        
         # Identify the game creator (first player who joined)
-        creator = game.players |> Enum.min_by(& &1.joined_at)
+        creator = updated_game.players |> Enum.min_by(& &1.joined_at)
         is_creator = current_player && current_player.id == creator.id
         
         socket = 
           socket
-          |> assign(:game, game)
+          |> assign(:game, updated_game)
           |> assign(:current_player, current_player)
           |> assign(:session_id, session_id)
           |> assign(:editing_name, false)
